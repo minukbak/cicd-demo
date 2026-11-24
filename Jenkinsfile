@@ -29,10 +29,11 @@ pipeline {
         }
 
         stage('Test') {
-            steps {
-                gradleTest()
-            }
-        }
+    	    steps {
+        	gradleTest()
+        	error('Intentional failure for Slack test')
+    	    }
+	}
 
         stage('Artifact Archive') {
             steps {

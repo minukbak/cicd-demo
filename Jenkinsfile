@@ -1,3 +1,6 @@
+
+@Library('cicd-library@main') _
+
 pipeline {
     agent any
 
@@ -22,24 +25,19 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh './gradlew clean assemble'
+                gradleBuild()
             }
         }
 
         stage('Test') {
             steps {
-                sh './gradlew test'
-            }
-            post {
-                always {
-                    junit 'app/build/test-results/test/*.xml'
-                }
+                gradleTest()
             }
         }
 
-        stage('Artifact Check') {
+        stage('Artifact') {
             steps {
-                sh 'ls -lh app/build/libs/'
+                archiveJar()
             }
         }
     }

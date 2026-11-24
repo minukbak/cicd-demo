@@ -31,7 +31,6 @@ pipeline {
         stage('Test') {
     	    steps {
         	gradleTest()
-        	error('Intentional failure for Slack test')
     	    }
 	}
 

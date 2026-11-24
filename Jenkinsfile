@@ -5,6 +5,8 @@ pipeline {
 
     options {
         skipDefaultCheckout()
+        disableConcurrentBuilds()
+        timestamps()
     }
 
     stages {
@@ -19,6 +21,7 @@ pipeline {
                 sh 'java -version'
                 sh 'chmod +x gradlew'
                 sh './gradlew --version'
+                sh 'aws --version'
             }
         }
 
@@ -29,10 +32,10 @@ pipeline {
         }
 
         stage('Test') {
-    	    steps {
-        	gradleTest()
-    	    }
-	}
+            steps {
+                gradleTest()
+            }
+        }
 
         stage('Artifact Archive') {
             steps {
@@ -40,20 +43,26 @@ pipeline {
             }
         }
 
-        stage('Artifact Upload') {
+        stage('Artifact Upload & Verify') {
             steps {
                 uploadArtifact()
+            }
+        }
+
+        stage('Deploy & Verify') {
+            steps {
+                deployApp()
             }
         }
     }
 
     post {
         success {
-            echo 'CI Pipeline SUCCESS'
+            echo 'CI/CD Pipeline SUCCESS'
         }
 
         failure {
-            echo 'CI Pipeline FAILED'
+            echo 'CI/CD Pipeline FAILED'
         }
 
         cleanup {

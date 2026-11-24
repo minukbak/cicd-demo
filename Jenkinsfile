@@ -51,8 +51,19 @@ pipeline {
         success {
             echo 'CI Pipeline SUCCESS'
         }
+
         failure {
             echo 'CI Pipeline FAILED'
+        }
+
+        cleanup {
+            script {
+                try {
+                    notifySlack(currentBuild.currentResult)
+                } catch (Exception e) {
+                    echo '[WARNING] Slack notification failed'
+                }
+            }
         }
     }
 }

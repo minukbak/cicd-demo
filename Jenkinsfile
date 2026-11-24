@@ -1,4 +1,3 @@
-
 @Library('cicd-library@main') _
 
 pipeline {
@@ -35,9 +34,15 @@ pipeline {
             }
         }
 
-        stage('Artifact') {
+        stage('Artifact Archive') {
             steps {
                 archiveJar()
+            }
+        }
+
+        stage('Artifact Upload') {
+            steps {
+                uploadArtifact()
             }
         }
     }
